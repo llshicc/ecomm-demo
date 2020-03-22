@@ -27,8 +27,8 @@ class UsersRepository {
 
   async getOneBy(attrs) {
     const records = await this.getAll();
-    let find = true;
     for (let item of records) {
+      let find = true;
       for (let attr in attrs) {
         if (item[attr] !== attrs[attr]) find = false;
       }
