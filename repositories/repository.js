@@ -1,14 +1,14 @@
 const fs = require('fs');
 const crypto = require('crypto');
-const util = require('util');
+const path = require('path');
 
 module.exports = class UsersRepository {
   constructor(filename) {
     this.filename = filename || 'default-repo.json';
     try {
-      fs.accessSync(this.filename);
+      fs.accessSync(path.join(__dirname, '../data/', this.filename));
     } catch (err) {
-      fs.writeFileSync(this.filename, '[]');
+      fs.writeFileSync(path.join(__dirname, '../data/', this.filename), '[]');
     }
   }
 

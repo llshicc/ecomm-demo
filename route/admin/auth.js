@@ -1,5 +1,5 @@
 const express = require('express');
-const usersRepository = require('../../repositories/user');
+const usersRepo = require('../../repositories/user');
 const loginTemplate = require('../../views/admin/auth/login');
 const signupTemplate = require('../../views/admin/auth/signup');
 const { validationResult } = require('express-validator');
@@ -14,7 +14,7 @@ const {
 const router = express.Router();
 
 router.get('/signup', async (req, res) => {
-  const user = (await usersRepository.getOne(req.session.uid)) || {};
+  const user = (await usersRepo.getOne(req.session.uid)) || {};
   res.send(signupTemplate({ email: user.email }));
 });
 
@@ -25,7 +25,7 @@ router.post(
     const errors = validationResult(req);
     if (errors.isEmpty()) {
       const { email, password } = req.body;
-      await usersRepository.create({
+      await usersRepo.create({
         email,
         password
       });
@@ -46,7 +46,7 @@ router.post(
   async (req, res) => {
     const errors = validationResult(req);
     if (errors.isEmpty()) {
-      const user = usersRepository.getOneBy({ email: req.body.email });
+      const user = usersRepo.getOneBy({ email: req.body.email });
       req.session.uid = user.id;
       res.send('Login successful');
     } else {

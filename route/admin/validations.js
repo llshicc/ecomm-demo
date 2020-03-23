@@ -2,6 +2,16 @@ const { check } = require('express-validator');
 const usersRepository = require('../../repositories/user');
 
 Object.assign(module.exports, {
+  productNameValidation: check('name')
+    .trim()
+    .isLength({ min: 5, max: 40 })
+    .withMessage('Product name must be 5-40 charaters'),
+
+  productPriceValidation: check('price')
+    .toFloat()
+    .isFloat({ min: 1 })
+    .withMessage('Please enter a valid number which must greater than 1'),
+
   emailValidation: check('email')
     .trim()
     .normalizeEmail()
