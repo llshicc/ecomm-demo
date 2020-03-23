@@ -4,10 +4,11 @@ const cookieSession = require('cookie-session');
 const userRouter = require('./route/admin/auth');
 
 const app = express();
+app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
   cookieSession({
-    keys: ['cc']
+    keys: ['llshicc']
   })
 );
 app.use(userRouter);

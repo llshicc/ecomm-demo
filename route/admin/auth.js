@@ -1,45 +1,58 @@
 const express = require('express');
-const path = require('path');
-const userReporsitory = require('../../repositories/user');
+const usersRepository = require('../../repositories/user');
 const loginTemplate = require('../../views/admin/auth/login');
 const signupTemplate = require('../../views/admin/auth/signup');
+const { validationResult } = require('express-validator');
+
+const {
+  emailValidation,
+  passwordValidation,
+  passwordConfirmationValidation,
+  loginEmailValidation,
+  loginPasswordValidation
+} = require('./validations');
 const router = express.Router();
 
 router.get('/signup', async (req, res) => {
-  const user = (await userReporsitory.getOne(req.session.uid)) || {};
+  const user = (await usersRepository.getOne(req.session.uid)) || {};
   res.send(signupTemplate({ email: user.email }));
 });
 
-router.post('/signup', async (req, res) => {
-  if (req.body.password !== req.body['confirm-password']) {
-    res.send('Password is not same in confirmtion');
+router.post(
+  '/signup',
+  [emailValidation, passwordValidation, passwordConfirmationValidation],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      const { email, password } = req.body;
+      await usersRepository.create({
+        email,
+        password
+      });
+      res.send('Sign up successfully');
+    } else {
+      res.send(signupTemplate({ errors }));
+    }
   }
-  const { email, password } = req.body;
-  await userReporsitory.create({
-    email,
-    password
-  });
-  res.send('Sign up successfully');
-});
+);
 
 router.get('/login', (req, res) => {
-  return res.send(loginTemplate());
+  return res.send(loginTemplate({ errors: null }));
 });
 
-router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-  // find email
-  const user = await userReporsitory.getOneBy({ email });
-  if (!user) {
-    return res.send('This email is not registered');
+router.post(
+  '/login',
+  [loginEmailValidation, loginPasswordValidation],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      const user = usersRepository.getOneBy({ email: req.body.email });
+      req.session.uid = user.id;
+      res.send('Login successful');
+    } else {
+      res.send(loginTemplate({ errors }));
+    }
   }
-  // check password
-  if (!(await userReporsitory.verifyPassword(user.password, password))) {
-    return res.send('Password is not correct');
-  }
-  // set session
-  req.session.uid = user.id;
-  res.send('Login successful');
-});
+);
 
 module.exports = router;

@@ -1,26 +1,32 @@
-module.exports = loginTemplate;
+const layout = require('../layout');
+const { getError } = require('../../helpers');
 
-function loginTemplate() {
-  return `
-    <!DOCTYPE html>
-    <html lang="en">
-      <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Login</title>
-      </head>
-      <body>
-        <form action="./login" method="POST">
-          <input type="text" name="email" id="email" placeholder="email" />
-          <input
-            type="password"
-            name="password"
-            id="password"
-            placeholder="password"
-          />
-          <button>Submit</button>
-        </form>
-      </body>
-    </html>
-  `;
-}
+module.exports = function loginTemplate({ errors }) {
+  const emailError = getError(errors, 'email');
+  const passwordError = emailError ? '' : getError(errors, 'password');
+  return layout({
+    content: `
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-one-quarter">
+            <form method="POST">
+              <h1 class="title">Sign in</h1>
+              <div class="field">
+                <label class="label">Email</label>
+                <input required class="input" placeholder="Email" name="email" />
+                <p class="help is-danger">${emailError}</p>
+              </div>
+              <div class="field">
+                <label class="label">Password</label>
+                <input required class="input" placeholder="Password" name="password" type="password" />
+                <p class="help is-danger">${passwordError}</p>
+              </div>
+              <button class="button is-primary">Submit</button>
+            </form>
+            <a href="/signup">Need an account? Sign Up</a>
+          </div>
+        </div>
+      </div>
+    `
+  });
+};
