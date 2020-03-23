@@ -4,17 +4,21 @@ const path = require('path');
 
 module.exports = class UsersRepository {
   constructor(filename) {
-    this.filename = filename || 'default-repo.json';
+    this.path = path.join(
+      __dirname,
+      '../data/',
+      filename || 'default-repo.json'
+    );
     try {
-      fs.accessSync(path.join(__dirname, '../data/', this.filename));
+      fs.accessSync(this.path);
     } catch (err) {
-      fs.writeFileSync(path.join(__dirname, '../data/', this.filename), '[]');
+      fs.writeFileSync(this.path, '[]');
     }
   }
 
   async getAll() {
     return JSON.parse(
-      await fs.promises.readFile(this.filename, {
+      await fs.promises.readFile(this.path, {
         encoding: 'utf-8'
       })
     );
@@ -59,9 +63,6 @@ module.exports = class UsersRepository {
   }
 
   async writeAll(records) {
-    await fs.promises.writeFile(
-      this.filename,
-      JSON.stringify(records, null, 2)
-    );
+    await fs.promises.writeFile(this.path, JSON.stringify(records, null, 2));
   }
 };
