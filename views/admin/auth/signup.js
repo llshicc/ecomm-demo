@@ -1,7 +1,7 @@
 const layout = require('../layout');
 const { getError } = require('../../helpers');
 
-module.exports = function signupTemplate({ errors }) {
+module.exports = function signupTemplate({ errors } = {}) {
   return layout({
     content: `
       <div class="container">

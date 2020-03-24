@@ -2,7 +2,7 @@ const express = require('express');
 const usersRepo = require('../../repositories/user');
 const loginTemplate = require('../../views/admin/auth/login');
 const signupTemplate = require('../../views/admin/auth/signup');
-const { validationResult } = require('express-validator');
+const { errorHandler } = require('./middlewares');
 
 const {
   emailValidation,
@@ -21,38 +21,35 @@ router.get('/signup', async (req, res) => {
 router.post(
   '/signup',
   [emailValidation, passwordValidation, passwordConfirmationValidation],
+  errorHandler(signupTemplate),
   async (req, res) => {
-    const errors = validationResult(req);
-    if (errors.isEmpty()) {
-      const { email, password } = req.body;
-      await usersRepo.create({
-        email,
-        password
-      });
-      res.send('Sign up successfully');
-    } else {
-      res.send(signupTemplate({ errors }));
-    }
+    const { email, password } = req.body;
+    await usersRepo.create({
+      email,
+      password
+    });
+    res.send('Sign up successfully');
   }
 );
 
 router.get('/login', (req, res) => {
-  return res.send(loginTemplate({ errors: null }));
+  return res.send(loginTemplate());
 });
 
 router.post(
   '/login',
   [loginEmailValidation, loginPasswordValidation],
+  errorHandler(loginTemplate),
   async (req, res) => {
-    const errors = validationResult(req);
-    if (errors.isEmpty()) {
-      const user = usersRepo.getOneBy({ email: req.body.email });
-      req.session.uid = user.id;
-      res.send('Login successful');
-    } else {
-      res.send(loginTemplate({ errors }));
-    }
+    const user = await usersRepo.getOneBy({ email: req.body.email });
+    req.session.uid = user.id;
+    res.send('Login successful');
   }
 );
+
+router.get('/logout', (req, res) => {
+  req.session.uid = null;
+  res.redirect('/');
+});
 
 module.exports = router;

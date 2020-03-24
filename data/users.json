@@ -38,5 +38,10 @@
     "id": "aac5256d9468b284",
     "email": "fun@test.com",
     "password": "2b501797953e99efe44c59307836f9e59b555e55cb8821fe0691071bc83b3d7520345367dd739c7c5219e09f8372fc3695bdc46650dbb14872e75d41e9ec752a.65ab09fc"
+  },
+  {
+    "id": "befd5c7984f0879a",
+    "email": "test122@test.com",
+    "password": "d48d6fa2f2a93014ae1936e71a101331f67234347ec5eb2f830050e1d5a3800ee23c923ce50ef058bf6cbd90a8e323d520fb8ee732bd55c5f579accc013e0042.9881df16"
   }
 ]

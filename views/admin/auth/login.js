@@ -1,7 +1,7 @@
 const layout = require('../layout');
 const { getError } = require('../../helpers');
 
-module.exports = function loginTemplate({ errors }) {
+module.exports = function loginTemplate({ errors } = {}) {
   const emailError = getError(errors, 'email');
   const passwordError = emailError ? '' : getError(errors, 'password');
   return layout({
