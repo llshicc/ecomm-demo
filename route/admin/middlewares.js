@@ -4,7 +4,6 @@ Object.assign(module.exports, {
   errorHandler(templateFunc) {
     return function handleError(req, res, next) {
       const errors = validationResult(req);
-      console.log(errors);
       if (!errors.isEmpty()) {
         return res.send(templateFunc({ errors }));
       }

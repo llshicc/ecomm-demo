@@ -3,6 +3,7 @@ const multer = require('multer');
 
 const productsRepo = require('../../repositories/product');
 const productNewTemplate = require('../../views/admin/products/new');
+const productEditTemplate = require('../../views/admin/products/edit');
 const productsTemplate = require('../../views/admin/products/index');
 const {
   productNameValidation,
@@ -34,10 +35,43 @@ router.post(
     await productsRepo.create({
       title: req.body.title,
       price: req.body.price,
-      image: req.file.buffer.toString('base64')
+      image: req.body.image.buffer.toString('base64')
     });
     res.send('submited');
   }
 );
+
+router.get('/admin/products/:id/edit', requireAuth, async (req, res) => {
+  const product = await productsRepo.getOne(req.params.id);
+  if (!product) {
+    return res.send(`${req.params.id} is not exist`);
+  }
+  return res.send(productEditTemplate({ product }));
+});
+
+router.post(
+  '/admin/products/:id/edit',
+  requireAuth,
+  upload.single('image'),
+  uploadHandler,
+  [productNameValidation, productPriceValidation, imageValidation],
+  errorHandler(productEditTemplate),
+  async (req, res) => {
+    const newProduct = { title: req.body.title, price: req.body.price };
+    if (req.body.image)
+      newProduct.image = req.body.image.buffer.toString('base64');
+    await productsRepo.update(req.params.id, newProduct);
+    return res.redirect('/admin/products');
+  }
+);
+
+router.get('/admin/products/:id/delete', requireAuth, async (req, res) => {
+  const product = await productsRepo.getOne(req.params.id);
+  if (!product) {
+    return res.send(`${req.params.id} is not exist`);
+  }
+  await productsRepo.delete(req.params.id);
+  return res.redirect('/admin/products');
+});
 
 module.exports = router;

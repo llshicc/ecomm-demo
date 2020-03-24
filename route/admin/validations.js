@@ -13,8 +13,10 @@ Object.assign(module.exports, {
     .withMessage('Please enter a valid number which must greater than 1'),
 
   imageValidation: check('image').custom(file => {
-    console.log(file.mimetype);
-    if (!['image/png', 'image/jpg', 'image/jpeg'].includes(file.mimetype))
+    if (
+      file &&
+      !['image/png', 'image/jpg', 'image/jpeg'].includes(file.mimetype)
+    )
       throw new Error('The file submitted must be image');
     else return true;
   }),

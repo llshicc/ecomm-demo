@@ -1,6 +1,6 @@
 const layout = require('../layout');
 
-module.exports = ({ products }) => {
+module.exports = function productsTemplate({ products }) {
   const renderedProducts = products
     .map(product => {
       return `
@@ -15,7 +15,9 @@ module.exports = ({ products }) => {
           </a>
         </td>
         <td>
-          <button class="button is-danger" href="">Delete</button>
+          <a href="/admin/products/${product.id}/delete">
+            <button class="button is-danger">Delete</button>
+          </a>
         </td>
       </tr>
     `;
