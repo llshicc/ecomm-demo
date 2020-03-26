@@ -15,9 +15,9 @@ module.exports = function productsTemplate({ products }) {
           </a>
         </td>
         <td>
-          <a href="/admin/products/${product.id}/delete">
+          <form method="POST" action="/admin/products/${product.id}/delete">
             <button class="button is-danger">Delete</button>
-          </a>
+          </form>
         </td>
       </tr>
     `;

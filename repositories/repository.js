@@ -43,18 +43,20 @@ module.exports = class UsersRepository {
   async create(attrs) {
     const records = await this.getAll();
     const id = crypto.randomBytes(8).toString('hex');
-    records.push({ id, ...attrs });
+    const item = { id, ...attrs };
+    records.push(item);
     await this.writeAll(records);
+    return item;
   }
 
   async update(id, attrs) {
-    if (attrs.hasOwnProperty('id')) {
-      throw new Error('Id can not be modified');
-    }
+    // A request to update id will be ignore
+    delete attrs.id;
     const records = await this.getAll();
     const item = records.find(i => i.id === id);
     Object.assign(item, attrs);
     await this.writeAll(records);
+    return item;
   }
 
   async delete(id) {

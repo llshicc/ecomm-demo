@@ -16,7 +16,7 @@ module.exports = function layout({ content }) {
           <nav class="navbar navbar-bottom">
             <div class="container navbar-container">
               <div>
-                <a href="/admin">
+                <a href="/admin/products">
                   <h3 class="title">Admin Panel</h3>
                 </a>
               </div>

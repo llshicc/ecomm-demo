@@ -24,11 +24,12 @@ router.post(
   errorHandler(signupTemplate),
   async (req, res) => {
     const { email, password } = req.body;
-    await usersRepo.create({
+    const uset = await usersRepo.create({
       email,
       password
     });
-    res.send('Sign up successfully');
+    req.session.uid = user.id;
+    res.redirect('/');
   }
 );
 
@@ -43,7 +44,7 @@ router.post(
   async (req, res) => {
     const user = await usersRepo.getOneBy({ email: req.body.email });
     req.session.uid = user.id;
-    res.send('Login successful');
+    res.redirect('/');
   }
 );
 

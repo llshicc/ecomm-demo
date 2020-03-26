@@ -65,7 +65,7 @@ router.post(
   }
 );
 
-router.get('/admin/products/:id/delete', requireAuth, async (req, res) => {
+router.post('/admin/products/:id/delete', requireAuth, async (req, res) => {
   const product = await productsRepo.getOne(req.params.id);
   if (!product) {
     return res.send(`${req.params.id} is not exist`);
