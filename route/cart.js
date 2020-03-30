@@ -35,10 +35,11 @@ router.post('/cart/products', checkCartId, async (req, res) => {
   res.redirect('/cart');
 });
 
-router.post('/cart/products/:id/delete', checkCartId, async (req, res) => {
+router.delete('/cart/products/:id', checkCartId, async (req, res) => {
   const cart = await cartsRepo.getOne(req.session.cartId);
   cart.products = cart.products.filter(item => item.id !== req.params.id);
   await cartsRepo.update(cart.id, cart);
+
   res.redirect('/cart');
 });
 

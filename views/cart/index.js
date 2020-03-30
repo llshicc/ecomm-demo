@@ -17,7 +17,9 @@ module.exports = function cartTemplate({ items }) {
               $${item.product.price * item.quantity}
             </div>
             <div class="remove">
-              <form method="POST" action="/cart/products/${item.id}/delete">
+              <form method="POST" action="/cart/products/${
+                item.id
+              }?_method=DELETE">
                 <button class="button is-danger">                  
                   <span class="icon is-small">
                     <i class="fas fa-times"></i>

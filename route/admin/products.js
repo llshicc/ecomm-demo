@@ -41,7 +41,7 @@ router.post(
   }
 );
 
-router.get('/admin/products/:id/edit', requireAuth, async (req, res) => {
+router.get('/admin/products/:id', requireAuth, async (req, res) => {
   const product = await productsRepo.getOne(req.params.id);
   if (!product) {
     return res.send(`${req.params.id} is not exist`);
@@ -49,8 +49,8 @@ router.get('/admin/products/:id/edit', requireAuth, async (req, res) => {
   return res.send(productEditTemplate({ product }));
 });
 
-router.post(
-  '/admin/products/:id/edit',
+router.put(
+  '/admin/products/:id',
   requireAuth,
   upload.single('image'),
   uploadHandler,
@@ -65,7 +65,7 @@ router.post(
   }
 );
 
-router.post('/admin/products/:id/delete', requireAuth, async (req, res) => {
+router.delete('/admin/products/:id', requireAuth, async (req, res) => {
   const product = await productsRepo.getOne(req.params.id);
   if (!product) {
     return res.send(`${req.params.id} is not exist`);

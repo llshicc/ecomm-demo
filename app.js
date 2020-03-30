@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
+const methodOverride = require('method-override');
 
 const userRouter = require('./route/admin/auth');
 const adminProductsRouter = require('./route/admin/products');
@@ -11,6 +12,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.static('public'));
+app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
   cookieSession({

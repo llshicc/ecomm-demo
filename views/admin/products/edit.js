@@ -7,7 +7,9 @@ module.exports = function productEditTemplate({ product, errors } = {}) {
       <div class="columns is-centered">
         <div class="column is-half">
           <h1 class="subtitle">Edit</h1>
-          <form method="POST" enctype="multipart/form-data">
+          <form method="POST" enctype="multipart/form-data" action="/admin/products/${
+            product.id
+          }?_method=PUT">
             <div class="field">
               <label class="label">Title</label>
               <input class="input" placeholder="Title" name="title" value="${
